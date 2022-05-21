@@ -19,5 +19,10 @@ public class TileMapManagerEditor : Editor
 		{
 			script.ClearMap();
 		}
+
+        if (GUILayout.Button("Load Map"))
+		{
+			script.LoadMap();
+		}
 	}
 }

@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using System;
 
 public class TilemapManager : MonoBehaviour
 {
@@ -39,7 +40,8 @@ public class TilemapManager : MonoBehaviour
 		}
 	}
 
-	public void ClearMap() {
+	public void ClearMap()
+	{
 		var maps = FindObjectsOfType<Tilemap>();
 
 		foreach (var tilemap in maps)
@@ -48,7 +50,82 @@ public class TilemapManager : MonoBehaviour
 		}
 	}
 
-	public void LoadMap() { }
+	public void LoadMap()
+	{
+		/// Load map
+		var level = Resources.Load<ScriptableLevel>($"Levels/Level {_levelIndex}");
+		Debug.Log(level);
+		/// Check if it exists
+		if (level == null)
+		{
+			Debug.LogError($"Level {_levelIndex} does not exist.");
+			return;
+		}
+
+		/// Clear anything left over
+		ClearMap();
+
+		// Set tiles from saved tiles by specific tile type so that we have control over specific tile types behaviours
+		// Gives granular control for all different types of tiles.
+		/// Generate map
+		foreach (var savedTile in level.GroundTiles)
+		{
+			Debug.Log($"Saved tile: {savedTile}, Tile: {savedTile.Tile}, Type: {savedTile.Tile.Type}");
+			switch (savedTile.Tile.Type)
+			{
+				case TileType.GrassBackground:
+					_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+					break;
+				case TileType.Cobble:
+					_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+					break;
+				case TileType.Snow:
+					_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+					break;
+				case TileType.Ice:
+					_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+					break;
+				case TileType.Rock:
+					_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		// foreach (var savedTile in level.UnitTiles)
+		// {
+		// 	switch (savedTile.Tile.Type)
+		// 	{
+		// 		case TileType.Player:
+		// 			_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+		// 			break;
+
+		// 		default:
+		// 			throw new ArgumentOutOfRangeException();
+		// 	}
+		// }
+
+		// foreach (var savedTile in level.EnemyTiles)
+		// {
+		// 	switch (savedTile.Tile.Type)
+		// 	{
+		// 		case TileType.ExampleEnemy:
+		// 			_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+		// 			// Add enemy to a list in the GameManager for example
+		// 			break;
+		// 		case TileType.ExampleGhostEnemy:
+		// 			_groundMap.SetTile(savedTile.Position, savedTile.Tile);
+		// 			// Add enemy to a list in the GameManager for example
+		//			// Spawn a particle system on the ghost
+		// 			break;
+
+		// 		default:
+		// 			throw new ArgumentOutOfRangeException();
+		// 	}
+		// }
+	}
 }
 
 #if UNITY_EDITOR
@@ -59,9 +136,9 @@ public static class ScriptableObjectUtility
 	{
 		AssetDatabase.CreateAsset(level, $"Assets/Resources/Levels/{level.name}.asset");
 
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-	 }
+		AssetDatabase.SaveAssets();
+		AssetDatabase.Refresh();
+	}
 }
 
 #endif
