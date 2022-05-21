@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class ScriptableLevel : ScriptableObject
 	public List<SavedTile> UnitTiles;
 }
 
+[Serializable]
 public class SavedTile
 {
 	public Vector3Int Position;
