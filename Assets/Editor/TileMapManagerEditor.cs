@@ -14,5 +14,10 @@ public class TileMapManagerEditor : Editor
 		{
 			script.SaveMap();
 		}
+
+        if (GUILayout.Button("Clear Map"))
+		{
+			script.ClearMap();
+		}
 	}
 }

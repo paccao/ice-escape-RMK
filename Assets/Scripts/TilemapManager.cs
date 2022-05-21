@@ -39,7 +39,14 @@ public class TilemapManager : MonoBehaviour
 		}
 	}
 
-	public void ClearMap() { }
+	public void ClearMap() {
+		var maps = FindObjectsOfType<Tilemap>();
+
+		foreach (var tilemap in maps)
+		{
+			tilemap.ClearAllTiles();
+		}
+	}
 
 	public void LoadMap() { }
 }
