@@ -8,7 +8,7 @@ public class TileMapManagerEditor : Editor
 	{
 		DrawDefaultInspector();
 
-		var script = (TilemapManager)target;
+		var script = (TilemapManager) target;
 
 		if (GUILayout.Button("Save Map"))
 		{

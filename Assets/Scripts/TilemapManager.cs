@@ -20,7 +20,6 @@ public class TilemapManager : MonoBehaviour
 		newLevel.GroundTiles = GetTilesFromMap(_groundMap).ToList();
 		newLevel.UnitTiles = GetTilesFromMap(_unitMap).ToList();
 
-
 		ScriptableObjectUtility.SaveLevelFile(newLevel);
 
 		IEnumerable<SavedTile> GetTilesFromMap(Tilemap map)
@@ -29,7 +28,9 @@ public class TilemapManager : MonoBehaviour
 			{
 				if (map.HasTile(pos))
 				{
-					var levelTile = map.GetTile<LevelTile>(pos);
+					// TODO: Add Tile maps in the editor for each tile type.
+					var levelTile = map.GetTile<LevelTile>(pos); // TODO: This returns null for some reason
+					Debug.Log(levelTile);
 					yield return new SavedTile()
 					{
 						Position = pos,
