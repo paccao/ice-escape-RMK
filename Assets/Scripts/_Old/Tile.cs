@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class OldTile : MonoBehaviour
 {
 	[SerializeField] private Color _baseColor, _offsetColor;
 	[SerializeField] private SpriteRenderer _renderer;

@@ -1,5 +1,6 @@
 {
 	"files.eol": "auto",
+	"editor.formatOnSave": false,
 	"files.exclude": {
 		"**/.DS_Store": true,
 		"**/.git": true,

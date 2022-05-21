@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "New Level Tile", menuName = "2D/Tiles/Level Tile")]
 public class LevelTile : Tile
 {
+	// Tile information, could be anything like for example onCollisionEnter event to set different player states depending on TileType.
 	public TileType Type;
 }
 
