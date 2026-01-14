@@ -29,34 +29,6 @@
                     "isPartOfComposite": false
                 }
             ]
-        },
-        {
-            "name": "SlideMovement",
-            "id": "9e6084a7-c9cf-4ccc-b4a0-134290fe7535",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "3902afd3-8225-48a4-b3ae-697c08e67d5b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "47c8b87c-102f-4e10-b63a-d93bc74633e6",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "New action",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
         }
     ],
     "controlSchemes": []

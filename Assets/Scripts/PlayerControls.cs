@@ -115,34 +115,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""SlideMovement"",
-            ""id"": ""9e6084a7-c9cf-4ccc-b4a0-134290fe7535"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""3902afd3-8225-48a4-b3ae-697c08e67d5b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""47c8b87c-102f-4e10-b63a-d93bc74633e6"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""New action"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": []
@@ -150,15 +122,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // GroundMovement
         m_GroundMovement = asset.FindActionMap("GroundMovement", throwIfNotFound: true);
         m_GroundMovement_Move = m_GroundMovement.FindAction("Move", throwIfNotFound: true);
-        // SlideMovement
-        m_SlideMovement = asset.FindActionMap("SlideMovement", throwIfNotFound: true);
-        m_SlideMovement_Newaction = m_SlideMovement.FindAction("New action", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
         UnityEngine.Debug.Assert(!m_GroundMovement.enabled, "This will cause a leak and performance issues, PlayerControls.GroundMovement.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_SlideMovement.enabled, "This will cause a leak and performance issues, PlayerControls.SlideMovement.Disable() has not been called.");
     }
 
     /// <summary>
@@ -326,102 +294,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="GroundMovementActions" /> instance referencing this action map.
     /// </summary>
     public GroundMovementActions @GroundMovement => new GroundMovementActions(this);
-
-    // SlideMovement
-    private readonly InputActionMap m_SlideMovement;
-    private List<ISlideMovementActions> m_SlideMovementActionsCallbackInterfaces = new List<ISlideMovementActions>();
-    private readonly InputAction m_SlideMovement_Newaction;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "SlideMovement".
-    /// </summary>
-    public struct SlideMovementActions
-    {
-        private @PlayerControls m_Wrapper;
-
-        /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
-        /// </summary>
-        public SlideMovementActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "SlideMovement/Newaction".
-        /// </summary>
-        public InputAction @Newaction => m_Wrapper.m_SlideMovement_Newaction;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_SlideMovement; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="SlideMovementActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(SlideMovementActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="SlideMovementActions" />
-        public void AddCallbacks(ISlideMovementActions instance)
-        {
-            if (instance == null || m_Wrapper.m_SlideMovementActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_SlideMovementActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="SlideMovementActions" />
-        private void UnregisterCallbacks(ISlideMovementActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="SlideMovementActions.UnregisterCallbacks(ISlideMovementActions)" />.
-        /// </summary>
-        /// <seealso cref="SlideMovementActions.UnregisterCallbacks(ISlideMovementActions)" />
-        public void RemoveCallbacks(ISlideMovementActions instance)
-        {
-            if (m_Wrapper.m_SlideMovementActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
-        /// <seealso cref="SlideMovementActions.AddCallbacks(ISlideMovementActions)" />
-        /// <seealso cref="SlideMovementActions.RemoveCallbacks(ISlideMovementActions)" />
-        /// <seealso cref="SlideMovementActions.UnregisterCallbacks(ISlideMovementActions)" />
-        public void SetCallbacks(ISlideMovementActions instance)
-        {
-            foreach (var item in m_Wrapper.m_SlideMovementActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_SlideMovementActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    /// <summary>
-    /// Provides a new <see cref="SlideMovementActions" /> instance referencing this action map.
-    /// </summary>
-    public SlideMovementActions @SlideMovement => new SlideMovementActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GroundMovement" which allows adding and removing callbacks.
     /// </summary>
@@ -436,20 +308,5 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SlideMovement" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="SlideMovementActions.AddCallbacks(ISlideMovementActions)" />
-    /// <seealso cref="SlideMovementActions.RemoveCallbacks(ISlideMovementActions)" />
-    public interface ISlideMovementActions
-    {
-        /// <summary>
-        /// Method invoked when associated input action "New action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNewaction(InputAction.CallbackContext context);
     }
 }
