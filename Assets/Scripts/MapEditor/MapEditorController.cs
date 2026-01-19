@@ -26,7 +26,6 @@ public class MapEditorController : MonoBehaviour
         editorControls = new EditorControls();
     }
 
-    // Called by EditorUIManager
     public void SetSelectedMapTile(int prefabIndex)
     {
         selectedMapTile = prefabIndex;
@@ -44,14 +43,12 @@ public class MapEditorController : MonoBehaviour
 
     private void OnPlace()
     {
-        // Called on right mouse button down (or click)
         isRightMouseDown = true;
         PlaceTileAtMouse();
     }
 
     private void OnRightMouseUp()
     {
-        // Call this on right mouse button up
         isRightMouseDown = false;
         lastPlacedGridPos = null;
     }
@@ -77,8 +74,10 @@ public class MapEditorController : MonoBehaviour
             return;
         targetPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2Int gridPos = new Vector2Int(Mathf.RoundToInt(targetPosition.x), Mathf.RoundToInt(targetPosition.y));
+
         if (lastPlacedGridPos.HasValue && lastPlacedGridPos.Value == gridPos)
             return; // Don't place again on same cell
+
         lastPlacedGridPos = gridPos;
         Debug.Log("Place position: " + targetPosition);
         if (tilePrefabs != null && tilePrefabs.Length > 0 && selectedMapTile >= 0 && selectedMapTile < tilePrefabs.Length)
@@ -91,7 +90,7 @@ public class MapEditorController : MonoBehaviour
         }
     }
 
-    // Utility: Raycast to check if pointer is over UI
+    // Raycast to check if mouse pointer is over UI
     private bool IsPointerOverUI()
     {
         if (EventSystem.current == null)
