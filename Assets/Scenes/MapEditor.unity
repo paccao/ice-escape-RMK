@@ -505,7 +505,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   selectedMapTile: 0
-  tilePrefabs: []
+  tilePrefabs:
+  - {fileID: 7974882789897751586, guid: 4b228cd1e14893a40b8fe9829738af0a, type: 3}
   tileManager: {fileID: 1779371363}
 --- !u!1 &619394800
 GameObject:
