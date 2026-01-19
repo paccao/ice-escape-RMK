@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using System.Collections;
+using System.Collections.Generic;
 
 public class MapEditorController : MonoBehaviour
 {
@@ -18,6 +18,9 @@ public class MapEditorController : MonoBehaviour
     [SerializeField]
     private TileManager tileManager;
 
+    private bool isRightMouseDown = false;
+    private Vector2Int? lastPlacedGridPos = null;
+
     void Start()
     {
         editorControls = new EditorControls();
@@ -32,7 +35,7 @@ public class MapEditorController : MonoBehaviour
     private void OnSelect()
     {
         // Prevent selection if pointer is over UI
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        if (IsPointerOverUI())
             return;
 
         targetPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -41,17 +44,43 @@ public class MapEditorController : MonoBehaviour
 
     private void OnPlace()
     {
-        // Prevent placement if pointer is over UI
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        // Called on right mouse button down (or click)
+        isRightMouseDown = true;
+        PlaceTileAtMouse();
+    }
+
+    private void OnRightMouseUp()
+    {
+        // Call this on right mouse button up
+        isRightMouseDown = false;
+        lastPlacedGridPos = null;
+    }
+
+    void Update()
+    {
+        // Drag placement logic
+        if (isRightMouseDown && Mouse.current != null && Mouse.current.rightButton.isPressed)
+        {
+            PlaceTileAtMouse();
+        }
+        // Optionally, reset if mouse released outside of OnRightMouseUp
+        if (isRightMouseDown && Mouse.current != null && !Mouse.current.rightButton.isPressed)
+        {
+            isRightMouseDown = false;
+            lastPlacedGridPos = null;
+        }
+    }
+
+    private void PlaceTileAtMouse()
+    {
+        if (IsPointerOverUI())
             return;
-
         targetPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Debug.Log("Place position: " + targetPosition);
-
-        // Convert world position to grid position (round to nearest int)
         Vector2Int gridPos = new Vector2Int(Mathf.RoundToInt(targetPosition.x), Mathf.RoundToInt(targetPosition.y));
-
-        // Place the selected tile prefab at the grid position
+        if (lastPlacedGridPos.HasValue && lastPlacedGridPos.Value == gridPos)
+            return; // Don't place again on same cell
+        lastPlacedGridPos = gridPos;
+        Debug.Log("Place position: " + targetPosition);
         if (tilePrefabs != null && tilePrefabs.Length > 0 && selectedMapTile >= 0 && selectedMapTile < tilePrefabs.Length)
         {
             tileManager.PlaceTile(gridPos, tilePrefabs[selectedMapTile]);
@@ -60,5 +89,19 @@ public class MapEditorController : MonoBehaviour
         {
             Debug.LogWarning("Invalid tile selection or prefabs not set.");
         }
+    }
+
+    // Utility: Raycast to check if pointer is over UI
+    private bool IsPointerOverUI()
+    {
+        if (EventSystem.current == null)
+            return false;
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Mouse.current.position.ReadValue()
+        };
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        return results.Count > 0;
     }
 }
