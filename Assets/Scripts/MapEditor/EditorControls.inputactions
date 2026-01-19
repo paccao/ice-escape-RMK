@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "name": "EditorControls",
+    "maps": [
+        {
+            "name": "MapEditor",
+            "id": "72ec2978-f907-41a6-b899-74993574700d",
+            "actions": [
+                {
+                    "name": "Place",
+                    "type": "Value",
+                    "id": "f17878a2-8264-426c-86c8-2eb6ae80adae",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Select",
+                    "type": "Value",
+                    "id": "697f0424-a41b-4873-812b-684eaf90fe4a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "da858010-31f6-464b-8219-c8e18801380a",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc1cbb80-3906-4256-a42d-a29a58fb7644",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
