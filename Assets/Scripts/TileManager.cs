@@ -1,3 +1,6 @@
+using System.IO;
+using System;
+using UnityEngine.Serialization;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -9,12 +12,27 @@ public enum TileType
 	Wall
 }
 
-[System.Serializable]
+[Serializable]
 public class TilePrefabEntry
 {
 	public TileType tileType;
 	public GameObject prefab;
 }
+
+[Serializable]
+public class TileSaveData
+{
+	public int x;
+	public int y;
+	public TileType tileType;
+}
+
+[Serializable]
+public class MapSaveData
+{
+	public List<TileSaveData> tiles = new List<TileSaveData>();
+}
+
 
 public class TileManager : MonoBehaviour
 {
@@ -72,5 +90,69 @@ public class TileManager : MonoBehaviour
 			Destroy(tiles[gridPos]);
 			tiles.Remove(gridPos);
 		}
+	}
+
+	// Export current map data to a serializable structure
+	public MapSaveData GetMapSaveData()
+	{
+		MapSaveData data = new MapSaveData();
+		foreach (var kvp in tiles)
+		{
+			TileSaveData tileData = new TileSaveData
+			{
+				x = kvp.Key.x,
+				y = kvp.Key.y,
+				tileType = GetTileTypeForPrefab(kvp.Value)
+			};
+			data.tiles.Add(tileData);
+		}
+		return data;
+	}
+
+	// Helper to get TileType from a tile GameObject instance
+	private TileType GetTileTypeForPrefab(GameObject tileObj)
+	{
+		foreach (var entry in tilePrefabs)
+		{
+			// Compare prefab reference (ignoring instance)
+			if (tileObj != null && tileObj.name.StartsWith(entry.Value.name))
+				return entry.Key;
+		}
+		return TileType.Snow; // Default fallback
+	}
+
+	public void SaveMapToFile(string path)
+	{
+		MapSaveData data = GetMapSaveData();
+		string json = JsonUtility.ToJson(data, true);
+		File.WriteAllText(path, json);
+		Debug.Log($"Map saved to {path}");
+	}
+
+	public void LoadMapFromFile(string path)
+	{
+		if (!File.Exists(path))
+		{
+			Debug.LogWarning($"Map file not found: {path}");
+			return;
+		}
+		string json = File.ReadAllText(path);
+		MapSaveData data = JsonUtility.FromJson<MapSaveData>(json);
+		ClearMap();
+		foreach (var tile in data.tiles)
+		{
+			PlaceTile(new Vector2Int(tile.x, tile.y), tile.tileType);
+		}
+		Debug.Log($"Map loaded from {path}");
+	}
+
+	public void ClearMap()
+	{
+		foreach (var tile in tiles.Values)
+		{
+			if (tile != null)
+				Destroy(tile);
+		}
+		tiles.Clear();
 	}
 }
