@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7330950782473499812}
   - component: {fileID: 5393144898768688019}
-  - component: {fileID: -8219389604988493005}
+  - component: {fileID: 1334603653851444189}
   m_Layer: 0
-  m_Name: GroundTile
-  m_TagString: Ground
+  m_Name: SnowTile
+  m_TagString: Deadly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.28627452, g: 0.5019608, b: 0.3647059, a: 1}
+  m_Color: {r: 0.9137255, g: 0.9529412, b: 0.9529412, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &-8219389604988493005
+--- !u!61 &1334603653851444189
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

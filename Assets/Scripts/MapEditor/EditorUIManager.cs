@@ -1,5 +1,4 @@
 using UnityEngine;
-
 using System.Collections.Generic;
 
 public class EditorUIManager : MonoBehaviour
@@ -7,21 +6,20 @@ public class EditorUIManager : MonoBehaviour
     [SerializeField]
     private MapEditorController mapEditorSystem;
 
-    // Map button names to prefab indices
-    private Dictionary<string, int> buttonToPrefabIndex = new Dictionary<string, int>
+    private Dictionary<string, TileType> buttonToTileType = new Dictionary<string, TileType>
     {
-        { "GroundButton", 0 },
-        { "IceNormalButton", 1 },
-        { "SnowButton", 2 },
-        { "WallButton", 3 }
+        { "GroundButton", TileType.Ground },
+        { "IceNormalButton", TileType.IceNormal },
+        { "SnowButton", TileType.Snow },
+        { "WallButton", TileType.Wall }
     };
 
     public void OnTileButtonClicked(string buttonName)
     {
-        if (buttonToPrefabIndex.TryGetValue(buttonName, out int prefabIndex))
+        if (buttonToTileType.TryGetValue(buttonName, out TileType tileType))
         {
-            mapEditorSystem.SetSelectedMapTile(prefabIndex);
-            Debug.Log("Selected tile: " + buttonName + " (index " + prefabIndex + ")");
+            mapEditorSystem.SetSelectedMapTile(tileType);
+            Debug.Log($"Selected tile: {buttonName} ({tileType})");
         }
         else
         {

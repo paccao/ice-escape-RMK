@@ -10,30 +10,34 @@ public class MapEditorController : MonoBehaviour
     private EditorControls editorControls;
 
     [SerializeField]
-    private int selectedMapTile;
-
-    [SerializeField]
-    private GameObject[] tilePrefabs;
-
-    [SerializeField]
     private TileManager tileManager;
 
     private bool isRightMouseDown = false;
     private Vector2Int? lastPlacedGridPos = null;
 
+    private TileType selectedTileType = TileType.Snow;
+
     void Start()
     {
         editorControls = new EditorControls();
+        // Fill the map with snow tiles by default
+        int mapSize = 64;
+        for (int x = 0; x < mapSize; x++)
+        {
+            for (int y = 0; y < mapSize; y++)
+            {
+                tileManager.PlaceTile(new Vector2Int(x, y), TileType.Snow);
+            }
+        }
     }
 
-    public void SetSelectedMapTile(int prefabIndex)
+    public void SetSelectedMapTile(TileType tileType)
     {
-        selectedMapTile = prefabIndex;
+        selectedTileType = tileType;
     }
 
     private void OnSelect()
     {
-        // Prevent selection if pointer is over UI
         if (IsPointerOverUI())
             return;
 
@@ -60,7 +64,7 @@ public class MapEditorController : MonoBehaviour
         {
             PlaceTileAtMouse();
         }
-        // Optionally, reset if mouse released outside of OnRightMouseUp
+        // Reset if mouse released outside of OnRightMouseUp
         if (isRightMouseDown && Mouse.current != null && !Mouse.current.rightButton.isPressed)
         {
             isRightMouseDown = false;
@@ -80,17 +84,9 @@ public class MapEditorController : MonoBehaviour
 
         lastPlacedGridPos = gridPos;
         Debug.Log("Place position: " + targetPosition);
-        if (tilePrefabs != null && tilePrefabs.Length > 0 && selectedMapTile >= 0 && selectedMapTile < tilePrefabs.Length)
-        {
-            tileManager.PlaceTile(gridPos, tilePrefabs[selectedMapTile]);
-        }
-        else
-        {
-            Debug.LogWarning("Invalid tile selection or prefabs not set.");
-        }
+        tileManager.PlaceTile(gridPos, selectedTileType);
     }
 
-    // Raycast to check if mouse pointer is over UI
     private bool IsPointerOverUI()
     {
         if (EventSystem.current == null)
