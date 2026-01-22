@@ -57,7 +57,7 @@ public class MapEditorController : MonoBehaviour
         lastPlacedGridPos = null;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Drag placement logic
         if (isRightMouseDown && Mouse.current != null && Mouse.current.rightButton.isPressed)
